@@ -16,16 +16,17 @@ main {
     opacity: 0.8;
     font-size: calc(25px + 4vw);
     margin-bottom: 0;
-    margin-top: 10px;
+    margin-top: 50px;
 }
 #firstplace-card {
-    width: 100%;
+    margin-top: 20px;
+    width: calc(100% - 20px);
     background-color: white;
     border-radius: 10px;
     padding: 10px;
 }
 #firstplace-card img {
-    width: calc(100% - 20px);
+    width: 100%;
     border-radius: 10px;
 }
 #firstplace-name {
@@ -47,6 +48,7 @@ main {
 #firstplace-score {
     font-size: calc(25px + 4vw);
     margin: 0;
+    color: chocolate;
 }
 
 #general-ranking-container {
