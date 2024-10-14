@@ -77,9 +77,9 @@ function loadRanking() {
     });
 
     // Create the first three spots names
-    document.getElementById('firstplace-name').innerHTML = data[0].name;
-    document.getElementById('secondplace-name').innerHTML = data[1].name;
-    document.getElementById('thirdplace-name').innerHTML = data[2].name;
+    document.getElementById('firstplace-name').innerHTML = '<strong>' + data[0].name + '</strong>';
+    document.getElementById('secondplace-name').innerHTML = '<strong>' + data[1].name + '</strong>';
+    document.getElementById('thirdplace-name').innerHTML = '<strong>' + data[2].name + '</strong>';
 
     // Create the first three spots scores
     document.getElementById('firstplace-scores').innerHTML = data[0].points + " /" + data[0].games;
@@ -113,7 +113,7 @@ function loadRanking() {
 
         let playerScore = document.createElement('p');
         playerScore.className = 'leaderboard-spot-points';
-        playerScore.innerHTML = player.points/player.games + " - " + player.points + " /" + player.games;
+        playerScore.innerHTML = (player.points/player.games).toFixed(2) + " - " + player.points + " /" + player.games;
 
         subContainer.appendChild(playerName);
         subContainer.appendChild(playerScore);
