@@ -13,18 +13,18 @@ document.addEventListener('DOMContentLoaded', function() {
 const dataset = [
     {
         name: "Alice",
-        points: 37,
-        games: 8
+        points: 36,
+        games: 9
     },
     {
         name: "Zoe",
-        points: 49,
-        games: 5
+        points: 57,
+        games: 6
     },
     {
         name: "Niccolò",
-        points: 78,
-        games: 12
+        points: 89,
+        games: 13
     },
     {
         name: "Marta",
@@ -33,8 +33,8 @@ const dataset = [
     },
     {
         name: "Diego",
-        points: 52,
-        games: 12
+        points: 58,
+        games: 13
     },
     {
         name: "Jacopo",
@@ -43,13 +43,13 @@ const dataset = [
     },
     {
         name: "Andrea",
-        points: 21,
-        games: 4
+        points: 43,
+        games: 5
     },
     {
         name: "Simone",
-        points: 11,
-        games: 5
+        points: 19,
+        games: 6
     },
     {
         name: "Martina",
