@@ -19,6 +19,14 @@ main {
     margin-top: 10px;
 }
 #firstplace-card {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+}
+#firstplace-card img {
+    width: calc(100% - 20px);
+    border-radius: 10px;
 }
 #firstplace-name {
     font-size: calc(25px + 5vw);
