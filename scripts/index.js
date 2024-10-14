@@ -76,50 +76,51 @@ function loadRanking() {
         return pointsA - pointsB;
     });
 
-    // Create the first three spots names
+    // Create the first place infos
     document.getElementById('firstplace-name').innerHTML = '<strong>' + data[0].name + '</strong>';
-    document.getElementById('secondplace-name').innerHTML = '<strong>' + data[1].name + '</strong>';
-    document.getElementById('thirdplace-name').innerHTML = '<strong>' + data[2].name + '</strong>';
+    document.getElementById('firstplace-score').innerHTML = (data[0].points/data[0].games).toFixed(2);
+    document.getElementById('firstplace-points').innerHTML = data[0].points + " punti";
+    document.getElementById('firstplace-games').innerHTML = data[0].games + " partite";
 
-    // Create the first three spots scores
-    document.getElementById('firstplace-scores').innerHTML = data[0].points + " /" + data[0].games;
-    document.getElementById('secondplace-scores').innerHTML = data[1].points + " /" + data[1].games;
-    document.getElementById('thirdplace-scores').innerHTML = data[2].points + " /" + data[2].games;
-
-    // Create the first three spots scores
-    document.getElementById('firstplace-points').innerHTML = (data[0].points/data[0].games).toFixed(2);
-    document.getElementById('secondplace-points').innerHTML = (data[1].points/data[1].games).toFixed(2);
-    document.getElementById('thirdplace-points').innerHTML = (data[2].points/data[2].games).toFixed(2);
-
-    for (let i = 3; i < data.length; i++) {
+    for (let i = 1; i < data.length; i++) {
         let player = new Player(data[i].name, data[i].points, data[i].games);
         
         // Create the ranking table
         let container = document.getElementById('general-ranking-container');
 
         let playerContainer = document.createElement('div');
-        playerContainer.className = 'leaderboard-spot-container';
-
-        let playerPosition = document.createElement('p');
-        playerPosition.className = 'leaderboard-spot-position';
-        playerPosition.innerHTML = i + 1 + "°";
-
-        let subContainer = document.createElement('div');
-        subContainer.className = 'leaderboard-spot-sub';
+        playerContainer.className = 'player-container';
 
         let playerName = document.createElement('p');
-        playerName.className = 'leaderboard-spot-name';
-        playerName.innerHTML = player.name;
+        playerName.className = 'player-name';
+        playerName.innerHTML = "<strong>" + (i + 1) + "°</strong> " + player.name;
 
-        let playerScore = document.createElement('p');
-        playerScore.className = 'leaderboard-spot-points';
-        playerScore.innerHTML = (player.points/player.games).toFixed(2) + " - " + player.points + " /" + player.games;
+        let subbox = document.createElement('div');
+        subbox.className = 'player-subbox';
 
-        subContainer.appendChild(playerName);
-        subContainer.appendChild(playerScore);
+        let score = document.createElement('p');
+        score.className = 'player-score';
+        score.innerHTML = (player.points/player.games).toFixed(2);
 
-        playerContainer.appendChild(playerPosition);
-        playerContainer.appendChild(subContainer);
+        subbox.appendChild(score);
+
+        let subdiv = document.createElement('div');
+
+        let points = document.createElement('p');
+        points.className = 'player-points';
+        points.innerHTML = player.points + " punti";
+
+        let games = document.createElement('p');
+        games.className = 'player-games';
+        games.innerHTML = player.games + " partite";
+
+        subdiv.appendChild(points);
+        subdiv.appendChild(games);
+
+        subbox.appendChild(subdiv);
+
+        playerContainer.appendChild(playerName);
+        playerContainer.appendChild(subbox);
 
         container.appendChild(playerContainer);
     }

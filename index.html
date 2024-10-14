@@ -8,33 +8,21 @@
         <script src="scripts/index.js?v=3"></script>
     </head>
     <body>
-        <div id="mainimg"></div>
-        <h1 id="maintitle">CACTUS</h1>
-        <p id="subtitle">La lega dei campioni</p>
-        <div id="podium-container">
-            <div id="podium-scores-cont">
-                <div class="podium-card" id="second-place">
-                    <p class="podium-name" id="secondplace-name">-</p>
-                    <p id="secondplace-points">-</p>
-                    <p id="secondplace-scores">-</p>
-                </div>
-                <div class="podium-card">
-                    <p class="podium-name" id="firstplace-name">Nome 1</p>
-                    <p id="firstplace-points">-</p>
-                    <p id="firstplace-scores">-</p>
-                </div>
-                <div class="podium-card" id="third-place">
-                    <p class="podium-name" id="thirdplace-name">Nome 3</p>
-                    <p id="thirdplace-points">-</p>
-                    <p id="thirdplace-scores">-</p>
-                </div>
-            </div>
-            <img src="assets/images/podium.png" alt="Cactus logo" id="podium-img">
-        </div>
         <main>
-            <div id="main-content">
-                <div id="general-ranking-container"></div>
+            <h2 id="subtitle">Cactus</h2>
+
+            <div id="firstplace-card">
+                <p id="firstplace-name"></p>
+                <div id="firstplace-subbox">
+                    <p id="firstplace-score"></p>
+                    <div>
+                        <p id="firstplace-points"></p>
+                        <p id="firstplace-games"></p>
+                    </div>
+                    
+                </div>
             </div>
+            <div id="general-ranking-container"></div>
         </main>
     </body>
 </html>
