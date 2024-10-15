@@ -65,6 +65,11 @@ const dataset = [
         name: "Guilherme",
         points: 25,
         games: 5
+    },
+    {
+        name: "Flora",
+        points: 3,
+        games: 1
     }
 ];
 
