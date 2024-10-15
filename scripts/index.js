@@ -81,12 +81,17 @@ function loadRanking() {
     document.getElementById('firstplace-score').innerHTML = (data[0].points/data[0].games).toFixed(2);
     document.getElementById('firstplace-points').innerHTML = data[0].points + " punti";
     document.getElementById('firstplace-games').innerHTML = data[0].games + " partite";
+    document.getElementById('firstplace-avatar').src = 'assets/images/avatars/' + data[0].name.toLowerCase() + '.png';
 
     for (let i = 1; i < data.length; i++) {
         let player = new Player(data[i].name, data[i].points, data[i].games);
         
         // Create the ranking table
         let container = document.getElementById('general-ranking-container');
+
+        let avatar = document.createElement('img');
+        avatar.className = 'player-avatar';
+        avatar.src = 'assets/images/avatars/' + player.name.toLowerCase() + '.png';
 
         let playerContainer = document.createElement('div');
         playerContainer.className = 'player-container';
@@ -119,8 +124,13 @@ function loadRanking() {
 
         subbox.appendChild(subdiv);
 
-        playerContainer.appendChild(playerName);
-        playerContainer.appendChild(subbox);
+        playerContainer.appendChild(avatar);
+
+        let tmpDiv = document.createElement('div');
+        tmpDiv.appendChild(playerName);
+        tmpDiv.appendChild(subbox);
+
+        playerContainer.appendChild(tmpDiv);
 
         container.appendChild(playerContainer);
     }
