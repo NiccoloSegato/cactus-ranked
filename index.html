@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Home - Cactus Ranked</title>
         <link rel="stylesheet" type="text/css" href="styles/index.css?v=6">
-        <script src="scripts/index.js?v=9"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     </head>
     <body>
         <main>
@@ -28,6 +28,174 @@
                 </div>
             </div>
             <div id="general-ranking-container"></div>
+            <div id="new-data">
+                <h2>Aggiungi partita</h2>
+                <input type="text" id="player-name" placeholder="ID giocatore">
+                <input type="number" id="player-points" placeholder="Punti">
+                <input type="password" id="secret" placeholder="Password">
+                <button id="addGameBtn">Aggiungi</button>
+            </div>
         </main>
+
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+            import { getFirestore, collection, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+            
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyAX_PXC9kfx6T8sBh44xg0cGtBw4qHzIvs",
+                authDomain: "cactus-ranked.firebaseapp.com",
+                projectId: "cactus-ranked",
+                storageBucket: "cactus-ranked.appspot.com",
+                messagingSenderId: "706199930299",
+                appId: "1:706199930299:web:b69ea21a0f2683a5d2309e"
+            };
+            
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+        
+            // Define the async function to read data from Firestore
+            const readData = async () => {
+                const userDoc = collection(db, "players");  // Reference the "players" collection
+        
+                try {
+                    // Fetch all documents from the "players" collection
+                    const snapshot = await getDocs(userDoc);
+
+                    // The structure of the data is an array of documents
+                    // every of them has:
+                    // - name: The player's name
+                    // - points: The player's points
+                    // - games: The player's games
+
+                    // Order the documents by points/total games
+                    // Convert the snapshot.docs to an array
+                    const docsArray = snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
+
+                    // Sort the documents by points/total games
+                    docsArray.sort((a, b) => {
+                        let pointsA = a.data.points / a.data.games;
+                        let pointsB = b.data.points / b.data.games;
+                        return pointsA - pointsB;
+                    });
+                    
+                    // Rendering the data of the first player
+                    const firstPlace = docsArray[0].data;
+                    document.getElementById('firstplace-name').innerHTML = '<strong>' + firstPlace.name + '</strong>';
+                    document.getElementById('firstplace-score').innerHTML = (firstPlace.points/firstPlace.games).toFixed(2);
+                    document.getElementById('firstplace-points').innerHTML = firstPlace.points + " punti";
+                    document.getElementById('firstplace-games').innerHTML = firstPlace.games + " partite";
+                    document.getElementById('firstplace-avatar').src = 'assets/images/avatars/' + firstPlace.name.toLowerCase() + '.png';
+
+                    // Rendering the data of the general ranking, starting from the second player
+                    let i = 1;
+                    docsArray.slice(1).forEach(doc => {
+                        let player = doc.data;
+
+                        let container = document.getElementById('general-ranking-container');
+
+                        let avatar = document.createElement('img');
+                        avatar.className = 'player-avatar';
+                        avatar.src = 'assets/images/avatars/' + player.name.toLowerCase() + '.png';
+
+                        let playerContainer = document.createElement('div');
+                        playerContainer.className = 'player-container';
+
+                        let playerName = document.createElement('p');
+                        playerName.className = 'player-name';
+                        playerName.innerHTML = "<strong>" + (i + 1) + "°</strong> " + player.name;
+
+                        let subbox = document.createElement('div');
+                        subbox.className = 'player-subbox';
+
+                        let score = document.createElement('p');
+                        score.className = 'player-score';
+                        score.innerHTML = (player.points/player.games).toFixed(2);
+
+                        subbox.appendChild(score);
+
+                        let subdiv = document.createElement('div');
+
+                        let points = document.createElement('p');
+                        points.className = 'player-points';
+                        points.innerHTML = player.points + " punti";
+
+                        let games = document.createElement('p');
+                        games.className = 'player-games';
+                        games.innerHTML = player.games + " partite";
+
+                        subdiv.appendChild(points);
+                        subdiv.appendChild(games);
+
+                        subbox.appendChild(subdiv);
+
+                        playerContainer.appendChild(avatar);
+
+                        let tmpDiv = document.createElement('div');
+                        tmpDiv.appendChild(playerName);
+                        tmpDiv.appendChild(subbox);
+
+                        playerContainer.appendChild(tmpDiv);
+
+                        container.appendChild(playerContainer);
+                        i++;
+                    });
+        
+                } catch (error) {
+                    // Log any errors
+                    console.error("Error reading document: ", error);
+                }
+            };
+        
+            // Call the function to fetch data
+            readData();  // <--- This is important, it triggers the Firestore read
+
+            // Add a game to the player after checking the input and secret field
+            const addGame = async() => {
+                let playerName = document.getElementById('player-name').value;
+                let playerPoints = parseInt(document.getElementById('player-points').value);
+                let secret = document.getElementById('secret').value;
+
+                // Transform the secret to MD5
+                secret = CryptoJS.MD5(secret).toString();
+
+                if (playerName == '' || playerPoints == '' || secret != 'f401de2fa51d9f77a2918e542fc5d20a') {
+                    alert('Inserisci i dati correttamente');
+                    return;
+                }
+
+                const playerDocRef = doc(db, "players", playerName);
+
+                try {
+                    // Fetch the current data of the player
+                    const playerDoc = await getDoc(playerDocRef);
+                    
+                    if (!playerDoc.exists()) {
+                        console.log("No such player!");
+                        return;
+                    }
+
+                    // Get the current games count
+                    const currentGames = playerDoc.data().games || 0;
+                    const currentPoints = playerDoc.data().points || 0;
+
+                    // Update the player's document
+                    await updateDoc(playerDocRef, {
+                        games: currentGames + 1, // Increment the games count
+                        points: currentPoints + playerPoints // Increment the points count
+                    });
+
+                    // Reload the page to update the ranking
+                    location.reload();
+                } 
+                catch (error) {
+                    console.error("Error updating document: ", error);
+                }
+            }
+
+            document.getElementById('addGameBtn').addEventListener('click', addGame);
+        </script>
     </body>
 </html>
